@@ -542,6 +542,7 @@ This project is part of SalesPyper internship assignment.
 
 ## 👤 Author
 
+Ashwin Jaiswal
 Created for SalesPyper Frontend Development Internship
 
 ---
