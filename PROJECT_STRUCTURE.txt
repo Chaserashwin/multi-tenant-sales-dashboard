@@ -1,0 +1,327 @@
+multi-tenant-sales-dashboard/
+│
+├── 📄 Configuration Files
+│   ├── package.json                      [Dependencies & Scripts]
+│   ├── vite.config.js                    [Vite Configuration]
+│   ├── tailwind.config.js                [Tailwind Configuration]
+│   ├── postcss.config.js                 [PostCSS Configuration]
+│   ├── .env.example                      [Environment Template]
+│   ├── .gitignore                        [Git Ignore Rules]
+│   └── index.html                        [HTML Entry Point]
+│
+├── 📁 src/                               [Source Code]
+│   │
+│   ├── 📄 main.jsx                       [React DOM Render Entry]
+│   ├── 📄 App.jsx                        [Root React Component]
+│   │
+│   ├── 📁 components/                    [All UI Components]
+│   │   │
+│   │   ├── 📁 Header/
+│   │   │   ├── Header.jsx                [Main Header]
+│   │   │   ├── TenantSwitcher.jsx        [Tenant Dropdown]
+│   │   │   └── RoleSwitcher.jsx          [Role Dropdown]
+│   │   │
+│   │   ├── 📁 Leads/
+│   │   │   ├── LeadsModule.jsx           [Leads Container]
+│   │   │   ├── LeadsTable.jsx            [Leads Table Display]
+│   │   │   └── StatusFilter.jsx          [Status Filter Dropdown]
+│   │   │
+│   │   ├── 📁 CallLogs/
+│   │   │   ├── CallLogsModule.jsx        [Call Logs Container]
+│   │   │   └── CallLogsTable.jsx         [Call Logs Table]
+│   │   │
+│   │   ├── 📁 Layout/
+│   │   │   ├── Dashboard.jsx             [Main Dashboard Layout]
+│   │   │   └── TabNavigation.jsx         [Tab Switcher]
+│   │   │
+│   │   └── 📁 Common/
+│   │       ├── LoadingState.jsx          [Loading Indicator]
+│   │       ├── EmptyState.jsx            [Empty State Display]
+│   │       └── PermissionGate.jsx        [Permission Checker]
+│   │
+│   ├── 📁 context/                       [Global State]
+│   │   └── TenantContext.jsx             [Tenant & Role Context]
+│   │
+│   ├── 📁 hooks/                         [Custom Hooks]
+│   │   └── useTenant.js                  [Tenant Context Hook]
+│   │
+│   ├── 📁 utils/                         [Utilities & Constants]
+│   │   ├── permissions.js                [Role Permissions]
+│   │   ├── mockData.js                   [Mock Data for Tenants]
+│   │   └── constants.js                  [App Constants]
+│   │
+│   └── 📁 styles/                        [Global Styles]
+│       └── globals.css                   [Global CSS]
+│
+├── 📁 dist/                              [Build Output (after npm run build)]
+│   ├── index.html
+│   ├── assets/
+│   └── ... (generated files)
+│
+├── 📁 node_modules/                      [Dependencies (after npm install)]
+│   └── ... (all packages)
+│
+├── 📄 Documentation
+│   ├── README.md                         [Complete Documentation]
+│   ├── SETUP.md                          [Setup & Installation Guide]
+│   ├── ARCHITECTURE.md                   [Technical Architecture]
+│   ├── QUICK_REFERENCE.md                [Quick Reference Guide]
+│   ├── FILES_LIST.md                     [Complete Files List]
+│   └── PROJECT_STRUCTURE.txt             [This File]
+│
+└── 📝 Git & System
+    ├── .git/                             [Git Repository]
+    ├── .gitignore                        [Files to Ignore]
+    └── .env                              [Environment Variables]
+
+
+═════════════════════════════════════════════════════════════════
+
+COMPONENT HIERARCHY & DATA FLOW:
+
+App.jsx
+│
+└─ TenantProvider
+   │  (Provides: currentTenant, currentRole, currentUser, hasPermission)
+   │
+   └─ Dashboard.jsx
+      │
+      ├─ Header.jsx
+      │  ├─ TenantSwitcher.jsx (reads/writes: currentTenant)
+      │  └─ RoleSwitcher.jsx (reads/writes: currentRole)
+      │
+      ├─ TabNavigation.jsx (reads: currentRole for permission check)
+      │
+      ├─ LeadsModule.jsx (reads: currentTenant, currentRole)
+      │  ├─ StatusFilter.jsx
+      │  ├─ LeadsTable.jsx
+      │  │  └─ Conditional based on hasPermission('edit_leads')
+      │  ├─ LoadingState.jsx
+      │  └─ EmptyState.jsx
+      │
+      └─ CallLogsModule.jsx (reads: currentTenant, currentRole)
+         ├─ CallLogsTable.jsx
+         ├─ LoadingState.jsx
+         └─ EmptyState.jsx
+
+
+═════════════════════════════════════════════════════════════════
+
+FILE COUNT BREAKDOWN:
+
+Configuration Files:        7 files
+├── package.json
+├── vite.config.js
+├── tailwind.config.js
+├── postcss.config.js
+├── .env.example
+├── .gitignore
+└── index.html
+
+Source Code Files:
+├── Entry Points:           2 files (main.jsx, App.jsx)
+├── Context:                1 file  (TenantContext.jsx)
+├── Hooks:                  1 file  (useTenant.js)
+├── Utilities:              3 files (permissions.js, mockData.js, constants.js)
+├── Styles:                 1 file  (globals.css)
+│
+└── Components:            13 files
+    ├── Header:             3 files
+    ├── Leads:              3 files
+    ├── CallLogs:           2 files
+    ├── Layout:             2 files
+    └── Common:             3 files
+
+Documentation Files:        5 files
+├── README.md
+├── SETUP.md
+├── ARCHITECTURE.md
+├── QUICK_REFERENCE.md
+└── FILES_LIST.md
+
+TOTAL:                     32 files
+
+
+═════════════════════════════════════════════════════════════════
+
+FOLDER ORGANIZATION RATIONALE:
+
+📁 components/
+   └─ Organized by FEATURE, not by type
+   └─ Each feature is self-contained
+   └─ Easy to find all Leads-related code
+   └─ Easy to remove/modify entire feature
+
+📁 context/
+   └─ Single file for global state
+   └─ Could grow to multiple files for different contexts
+
+📁 hooks/
+   └─ Custom React hooks
+   └─ Custom business logic hooks
+   └─ Reusable across components
+
+📁 utils/
+   └─ Pure utility functions
+   └─ Constants and configuration
+   └─ Mock data for development
+   └─ Permission definitions
+
+📁 styles/
+   └─ Global CSS
+   └─ Tailwind directives
+   └─ Custom styling
+
+
+═════════════════════════════════════════════════════════════════
+
+MODULE DEPENDENCIES:
+
+Leads Module:
+├── LeadsModule.jsx (Container)
+│   ├── StatusFilter.jsx
+│   ├── LeadsTable.jsx
+│   ├── LoadingState.jsx
+│   └── EmptyState.jsx
+└─ Dependencies:
+   ├─ useTenant hook
+   ├─ mockData (getLeadsByTenant)
+   ├─ permissions (PERMISSIONS)
+   ├─ constants (LEAD_STATUS_COLORS)
+   └─ Common components
+
+Call Logs Module:
+├── CallLogsModule.jsx (Container)
+│   ├── CallLogsTable.jsx
+│   ├── LoadingState.jsx
+│   └── EmptyState.jsx
+└─ Dependencies:
+   ├─ useTenant hook
+   ├─ mockData (getCallsByTenant)
+   ├─ permissions (PERMISSIONS)
+   ├─ constants (CALL_OUTCOME_COLORS)
+   └─ Common components
+
+Header Module:
+├── Header.jsx (Container)
+│   ├── TenantSwitcher.jsx
+│   └── RoleSwitcher.jsx
+└─ Dependencies:
+   ├─ useTenant hook
+   ├─ mockData (getTenants)
+   ├─ constants (APP_CONFIG)
+   └─ lucide-react (icons)
+
+Common Components:
+├── LoadingState.jsx (Presentation)
+├── EmptyState.jsx (Presentation)
+└── PermissionGate.jsx (Logic)
+   └─ Dependencies:
+      └─ useTenant hook
+
+
+═════════════════════════════════════════════════════════════════
+
+SIZE GUIDE:
+
+Small Components (< 80 lines):
+├─ TenantSwitcher.jsx
+├─ RoleSwitcher.jsx
+├─ StatusFilter.jsx
+├─ LoadingState.jsx
+├─ EmptyState.jsx
+├─ PermissionGate.jsx
+└─ useTenant.js
+
+Medium Components (80-150 lines):
+├─ LeadsTable.jsx
+├─ CallLogsTable.jsx
+├─ Header.jsx
+├─ TabNavigation.jsx
+└─ LeadsModule.jsx
+
+Large Files (150+ lines):
+├─ CallLogsModule.jsx
+├─ TenantContext.jsx
+├─ mockData.js
+└─ Documentation files
+
+
+═════════════════════════════════════════════════════════════════
+
+DEVELOPMENT WORKFLOW:
+
+1. Start Development:
+   ✓ npm install       (Install dependencies)
+   ✓ npm run dev       (Start dev server)
+
+2. Make Changes:
+   ✓ Edit files in src/
+   ✓ Vite Hot Module Replacement (instant update)
+
+3. Test:
+   ✓ Open http://localhost:3000
+   ✓ Check browser console (F12)
+
+4. Build:
+   ✓ npm run build     (Create dist/)
+   ✓ npm run preview   (Test build locally)
+
+5. Deploy:
+   ✓ Upload dist/ to server
+
+
+═════════════════════════════════════════════════════════════════
+
+IMPORT PATH REFERENCE:
+
+From src/components/Leads/LeadsModule.jsx:
+├─ import { useTenant } from '../../hooks/useTenant'
+├─ import { getLeadsByTenant } from '../../utils/mockData'
+├─ import { PERMISSIONS } from '../../utils/permissions'
+├─ import { LEAD_STATUS_COLORS } from '../../utils/constants'
+└─ import LoadingState from '../Common/LoadingState'
+
+From src/components/Header/Header.jsx:
+├─ import { useTenant } from '../../hooks/useTenant'
+├─ import TenantSwitcher from './TenantSwitcher'
+├─ import RoleSwitcher from './RoleSwitcher'
+└─ import { APP_CONFIG } from '../../utils/constants'
+
+From src/context/TenantContext.jsx:
+└─ import { rolePermissions } from '../utils/permissions'
+
+
+═════════════════════════════════════════════════════════════════
+
+FEATURE MODULES STRUCTURE:
+
+Each Feature Module has consistent structure:
+
+Feature/
+├── FeatureModule.jsx       [Container/Smart Component]
+│   ├─ Logic & state
+│   ├─ Permission checks
+│   ├─ Data fetching
+│   └─ Conditional rendering
+│
+├── FeatureTable.jsx        [Presentation Component]
+│   ├─ Table/List display
+│   ├─ Styling
+│   └─ No business logic
+│
+├── FeatureFilter.jsx       [Filter Component]
+│   ├─ Filter UI
+│   ├─ onChange callback
+│   └─ Simple component
+│
+└── Related utilities       [Hooks, helpers]
+    ├─ Custom hooks
+    └─ Utility functions
+
+
+═════════════════════════════════════════════════════════════════
+
+Last Updated: January 2025
+Project Version: 1.0.0
+Status: Production Ready ✓
